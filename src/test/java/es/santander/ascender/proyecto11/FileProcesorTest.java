@@ -2,9 +2,12 @@ package es.santander.ascender.proyecto11;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FileProcesorTest {
 
@@ -24,6 +27,12 @@ public class FileProcesorTest {
         String fileContent = procesor.leerFile(testFilePath);
 
         assertEquals(expectedContent, fileContent);
+
+        Path emptyFile = Files.createTempFile("emptyFile", ".txt");
+        String result = procesor.leerFile(emptyFile.toString());
+
+        assertEquals("", result);
+        Files.delete(emptyFile);
     }
 
     @Test
@@ -43,6 +52,14 @@ public class FileProcesorTest {
 
         // Eliminar archivo temporal después de la prueba
         Files.delete(tempFile);
+
+        String noExisteFilePath = "src/test/resources/noExiste/test.txt";
+        String contenido = "Contenido de prueba";
+
+        Exception exception = assertThrows(IOException.class, 
+        () -> procesor.escribirAFile(noExisteFilePath, contenido));
+
+        assertEquals("El directorio no existe: " + noExisteFilePath, exception.getMessage());
     }
 
     @Test
@@ -53,5 +70,19 @@ public class FileProcesorTest {
         String result = procesor.eliminarVocales(input);
 
         assertEquals(expected, result);
+
+        String inputEmpty = "";
+        String expectedEmpty = "";
+
+        String resultado = procesor.eliminarVocales(inputEmpty);
+
+        assertEquals(expectedEmpty, resultado);
+
+        String inputVocales = "aeiouAEIOU";
+        String expectedVocales = "";
+
+        String resultad = procesor.eliminarVocales(inputVocales);
+
+        assertEquals(expectedVocales, resultad);
     }
 }

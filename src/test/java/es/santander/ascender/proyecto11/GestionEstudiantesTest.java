@@ -22,7 +22,12 @@ public class GestionEstudiantesTest {
     void testAgregarEstudiante() {
         assertTrue(gestion.agregarEstudiante("Juan", 85));
         assertFalse(gestion.agregarEstudiante("Juan", 90)); // No se puede agregar el mismo estudiante dos veces
-    }
+        assertFalse(gestion.agregarEstudiante("", 80));
+        assertFalse(gestion.agregarEstudiante("   ", 90)); 
+        assertFalse(gestion.agregarEstudiante("Ju@n", 70)); 
+        assertFalse(gestion.agregarEstudiante("Pedro", -10));
+        assertFalse(gestion.agregarEstudiante("Ana", 110)); 
+        }
 
     @Test
     void testAgregarEstudiantes() {
@@ -48,6 +53,7 @@ public class GestionEstudiantesTest {
 
         assertTrue(gestion.eliminarEstudiante("Carlos"));
         assertFalse(gestion.existeEstudiante("Carlos"));
+        assertFalse(gestion.existeEstudiante("Rodrigo"));
     }
 
     @Test
@@ -64,6 +70,7 @@ public class GestionEstudiantesTest {
 
         assertEquals(88, gestion.obtenerCalificacion("Lucia"));
         assertNull(gestion.obtenerCalificacion("Pedro")); // Estudiante no existente
+        assertNull(gestion.obtenerCalificacion("Luci@")); 
     }
 
     @Test
